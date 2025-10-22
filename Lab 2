@@ -1,0 +1,44 @@
+from cryptography.hazmat.primitives.asymmetric import rsa, padding 
+from cryptography.hazmat.primitives import serialization, hashes 
+
+# generated keys  
+private_key = rsa.generate_private_key(public_exponent=65537, key_size=2048) 
+public_key = private_key.public_key() 
+
+# encrypted message  
+message = b"This is a secret message." 
+
+#  Encrypt using private key (actually signing it) 
+signature = private_key.sign( 
+    message, 
+    padding.PKCS1v15(), 
+    hashes.SHA256() 
+) 
+
+# Save the signature to a file 
+with open("ciphertext.bin", "wb") as f: 
+    f.write(signature) 
+
+  
+# Read the signature (ciphertext) from file 
+with open("ciphertext.bin", "rb") as f: 
+    signature_from_file = f.read() 
+
+# Decrypt using public key (verify signature) 
+try: 
+    public_key.verify( 
+        signature_from_file, 
+        message, 
+        padding.PKCS1v15(), 
+        hashes.SHA256() 
+    ) 
+    print("Signature is valid. Message is authentic.") 
+
+  #  Write the plain message to a file 
+    with open("decrypted.txt", "wb") as f: 
+        f.write(message) 
+
+except Exception as e: 
+    print("Verification failed!", e) 
+
+# code ends 
