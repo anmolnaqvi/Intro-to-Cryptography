@@ -40,6 +40,7 @@ def main():
     hash2 = generate_hash(file2)
     hash3 = generate_hash(file3)
 
+    # print
     print("Generated Hashes:")
     print(f"{file1}: {hash1}")
     print(f"{file2}: {hash2}")
